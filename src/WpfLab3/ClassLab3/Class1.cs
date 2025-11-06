@@ -55,57 +55,14 @@ namespace ClassLab3
             return newArray;
         }
 
+
         /// <summary>
-        /// Метод, для расчёта суммы массива
+        /// Метод, для выполенния операции. Тип операции зависит от TaskType
         /// </summary>
         /// <param name="array">Массив целых чисел</param>
-        /// <returns>Возвращает значения post и суммы массива в формате Tuple</returns>
-        public static (bool, int) PrefixSum(int[] array)
-        {
-            bool post = true; // Выполнение постусловия
-            int res = 0; // Результат
-            int j = array.Length; // Длина масива
-            int i = 0;
-
-            // Проверка инварианта на верность перед первой итерацией
-            Debug.Assert(res == 0);
-
-            while (i < j)
-            { 
-                // Инвариант перед шагом: res = сумма первых i элементов
-                // Тело
-               
-                res += array[i];
-                i++;
-
-                // Инвариант после шага: res = сумма первых i элементов
-            }
-
-            // Выход i == j => res = сумма всех элементов
-            return (post, res); 
-        }
-
-        ///// <summary>
-        ///// Метод, для расчёта суммы массива
-        ///// </summary>
-        ///// <param name="array">Массив целых чисел</param>
-        ///// <returns>Возвращает значения post и суммы массива в формате Tuple</returns>
-        //public static (bool, int) PrefixSumBySteps(int[] array)
-        //{
-        //    bool post = true; // Выполнение постусловия
-        //    int res = 0; // Результат
-        //    int j = array.Length; // Длина масива
-        //    int i = 0;
-
-        //    // Проверка инварианта на верность перед первой итерацией
-        //    Debug.Assert(res == 0);
-
-        //    bool result = TryMakeStep(i, j, res, array, TaskType.Sum);
-
-        //    // Выход i == j => res = сумма всех элементов
-        //    return (post, res);
-        //}
-
+        /// <param name="taskType">Тип операции</param>
+        /// <param name="T">Значение для сравнения</param>
+        /// <returns>Зачение post и результат в формате Tuple</returns>
         public static (bool, int) MakeOperation(int[] array, TaskType taskType, int T = 0)
         {
             bool post = true; // Выполнение постусловия
@@ -118,25 +75,28 @@ namespace ClassLab3
 
             while (i < j)
             {
-                // Инвариант перед шагом: res = сумма первых i элементов
                 // Тело
 
                 switch (taskType)
                 {
                     case TaskType.Sum:
+                        // Инвариант перед шагом: res = сумма первых i элементов
                         res = IncreaseSum(res, i, array); break;
+                        // Инвариант после шага: res = сумма первых i элементов
                     case TaskType.Count:
+                        // Инвариант перед шагом: res = количество элементов > T среди первых i 
                         res = IncreaseCount(res, i, array, T); break;
+                        // Инвариант после шага: res = количество элементов > T среди первых i 
                     case TaskType.Max:
+                        // Инвариант перед шагом: res = максимальный среди первых i элементов
                         res = ChangeMax(res, i, array); break;
+                        // Инвариант после шага: res = максимальный среди первых i элементов
                 }
-
                 i++;
 
-                // Инвариант после шага: res = сумма первых i элементов
             }
 
-            // Выход i == j => res = сумма всех элементов
+            // Выход i == j => res = сумма всех элементов / res = количество элементов > T среди первых i / res = максимальный среди первых i элементов
             return (post, res);
         }
 
@@ -172,7 +132,7 @@ namespace ClassLab3
         /// <param name="taskType">Тип операции</param>
         /// <param name="T">Значение для сравнения</param>
         /// <returns>true - если изменение прошло успешно, false - в случае окончания цикла</returns>
-        public static (bool, int, bool) TryMakeStep(bool post, int i, int j, int res, int[] array, TaskType taskType, int T)
+        private static (bool, int, bool) TryMakeStep(bool post, int i, int j, int res, int[] array, TaskType taskType, int T)
         {
             if (i >= j) return (false, res, true);
             else
@@ -198,61 +158,40 @@ namespace ClassLab3
         private static int IncreaseCount(int res, int i, int[] array, int T) => res += array[i] > T ? 1 : 0;
         private static int ChangeMax(int res, int i, int[] array) => Math.Max(array[i], res);
 
-        /// <summary>
-        /// Метод, для расчёта количества элементов > целого T
-        /// </summary>
-        /// <param name="array">Массив целых чисел</param>
-        /// <param name="T">Значение, с которым сравнивается каждый элемент массива</param>
-        /// <returns>Возвращает значения post и количества элементов в массиве > целого T в формате Tuple</returns>
-        public static (bool, int) CountGreaterThanT(int[] array, int T)
-        {
-            bool post = true; // Выполнение постусловия
-            int res = 0; // Результат
-            int j = array.Length; // Длина массива
-            int i = 0;
-
-            // Проверка инварианта на верность перед первой итерацией
-            Debug.Assert(res == 0);
-
-            while (i < j)
-            {
-                // Инвариант перед шагом: res = количество элементов > T среди первых i 
-                res += array[i] > T ? 1 : 0;
-                i++;
-
-                // Инвариант после шага: res = количество элементов > T среди первых i 
-            }
-
-            // Выход i == j => res = количество элементов > T
-            return (post, res);
-        }
 
         /// <summary>
-        /// Метод, для расчёта максимального элемента в массиве
+        /// Метод, возвращающий инвариант для указанного режима
         /// </summary>
+        /// <param name="taskType">Тип цикла</param>
         /// <param name="array">Массив целых чисел</param>
-        /// <returns>Возвращает значения post и максимального элемента в массиве в формате Tuple</returns>
-        public static (bool, int) PrefixMax(int[] array)
+        /// <param name="T">Значение для сравнения</param>
+        /// <returns>Инвариант в текстовом виде и инвариант в виде формулы в формате Tuple</returns>
+        public static (string, string) InvariantType(TaskType taskType, int[] array, int T)
         {
-            bool post = true; // Выполнение постусловия
-            int res = 0; // Результат
-            int j = array.Length; // Длина массива
-            int i = 0;
-
-            // Проверка инварианта на верность перед первой итерацией
-            Debug.Assert(res == 0);
-
-            while (i < j)
+            string invariantText, invariantFormula;
+            int j = array.Length;
+            switch (taskType)
             {
-                // Инвариант перед шагом: res = максимальный среди первых i элементов
-                res = Math.Max(array[i], res);
-                i++;
-
-                // Инвариант после шага: res = максимальный среди первых i элементов
+                case TaskType.Sum:
+                    invariantText = $"res = сумма первых {j} элементов массива";
+                    invariantFormula = $"res = Σ_{{i = 0}}^{{{j - 1}}} a[i]";
+                    break;
+                case TaskType.Count:
+                    invariantText = $"res = число индексов i < {j}, для которых a[i] > {T}";
+                    invariantFormula = $"res = |{{ i ∈ [0..{j - 1}] : a[i] > {T} }}|";
+                    break;
+                case TaskType.Max:
+                    invariantText = $"res = максимальный элемент массива a на промежутке от 0-го до {j - 1}-го элемента";
+                    invariantFormula = $"res = max(a[0 .. {j - 1}])";
+                    break;
+                default:
+                    invariantText = "";
+                    invariantFormula = "";
+                    break;
             }
 
-            // Выход i == j => res = максимальный элемент массива
-            return (post, res);
+            return (invariantText, invariantFormula);
         }
+
     }
 }
