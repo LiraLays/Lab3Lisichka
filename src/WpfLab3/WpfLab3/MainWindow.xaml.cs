@@ -96,16 +96,19 @@ namespace WpfLab3
         private void RadioButtonSum_Checked(object sender, RoutedEventArgs e)
         {
             ChangeStackPanelVisibilty(false);
+            textBox.Visibility = Visibility.Hidden;
             checkedTaskType = Class1.TaskType.Sum;
         }
         private void RadioButtonMax_Checked(object sender, RoutedEventArgs e)
         {
             ChangeStackPanelVisibilty(false);
+            textBox.Visibility = Visibility.Hidden;
             checkedTaskType = Class1.TaskType.Max;
         }
         private void RadioButtonCount_Checked(object sender, RoutedEventArgs e)
         {
             ChangeStackPanelVisibilty(true);
+            textBox.Visibility = Visibility.Visible;
             checkedTaskType = Class1.TaskType.Count;
         }
 
@@ -116,5 +119,7 @@ namespace WpfLab3
             TextBoxArrayChanges.Text = $"Значение POST: {post}\n" +
                 $"Значение res: {res}";
         }
+
+
     }
 }
