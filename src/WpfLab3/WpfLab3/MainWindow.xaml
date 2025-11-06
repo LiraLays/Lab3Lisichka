@@ -5,24 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfLab3"
         mc:Ignorable="d"
-        Title="MainWindow"
-        Height="450"
-        Width="800">
-    <Grid>
+        Title="Массиввы"
+        Height="480"
+        Width="352" ResizeMode="NoResize">
+
+    <Grid Background="#FF10121C" Margin="0,0,0,-6">
         <TextBox TextWrapping="Wrap"
                  Text="Данные"
                  Width="Auto"
                  Height="Auto"
-                 Margin="10,10,719,397"
-                 FontSize="18" />
+                 Margin="10,10,10,397"
+                 FontSize="22" FontFamily="Courier New" TextAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" SelectionBrush="Black" />
         <Button x:Name="ButtonGenerateArray"
                 Content="Сгенерировать массив"
                 HorizontalAlignment="Left"
                 Height="31"
                 Margin="10,50,0,0"
                 VerticalAlignment="Top"
-                Width="175"
-                Click="ButtonGenerateArray_Click" />
+                Width="316"
+                Click="ButtonGenerateArray_Click" Background="#FF1D2032" BorderBrush="White" Foreground="White" FontFamily="Courier New" FontSize="18" FontWeight="Bold" />
 
         <TextBox x:Name="TextBoxArrayElems"
                  HorizontalAlignment="Left"
@@ -31,73 +32,73 @@
                  TextWrapping="Wrap"
                  Text="Диапазон значений в массиве"
                  VerticalAlignment="Top"
-                 Width="316" />
+                 Width="316" Background="#FF1D2032" BorderBrush="White" Foreground="White" FontFamily="Courier New" FontSize="18" />
         <Slider x:Name="SliderSizeArray"
                 HorizontalAlignment="Left"
-                Height="26"
-                Margin="10,86,0,0"
+                Height="18"
+                Margin="10,92,0,0"
                 VerticalAlignment="Top"
-                Width="206"
+                Width="276"
                 SmallChange="1"
                 Maximum="100"
                 Minimum="1"
-                Value="1" />
+                Value="1" Foreground="White" />
         <Label x:Name="LabelSizeArray"
-               Content=""
+               Content="0"
                HorizontalAlignment="Left"
                Height="31"
-               Margin="221,81,0,0"
+               Margin="291,84,0,0"
                VerticalAlignment="Top"
-               Width="35" />
+               Width="35" Foreground="White" FontSize="18" FontFamily="Courier New" BorderBrush="White" />
         <Button x:Name="ButtonMakeStep"
                 Content="Шаг"
                 HorizontalAlignment="Left"
                 Height="28"
-                Margin="10,189,0,0"
+                Margin="10,243,0,0"
                 VerticalAlignment="Top"
-                Width="78"
-                Click="ButtonMakeStep_Click" />
+                Width="153"
+                Click="ButtonMakeStep_Click" Background="#FF1D2032" BorderBrush="White" Foreground="White" FontFamily="Courier New" FontSize="18" FontWeight="Bold" />
         <Button x:Name="ButtonStart"
                 Content="Пуск"
                 HorizontalAlignment="Left"
                 Height="28"
-                Margin="98,189,0,0"
+                Margin="168,243,0,0"
                 VerticalAlignment="Top"
-                Width="78"
-                Click="ButtonStart_Click" />
+                Width="158"
+                Click="ButtonStart_Click" Background="#FF1D2032" BorderBrush="White" Foreground="White" FontFamily="Courier New" FontSize="18" FontWeight="Bold" />
         <TextBox x:Name="TextBoxArrayChanges"
                  HorizontalAlignment="Left"
-                 Height="55"
-                 Margin="10,238,0,0"
+                 Height="156"
+                 Margin="10,276,0,0"
                  TextWrapping="Wrap"
                  Text=""
                  VerticalAlignment="Top"
-                 Width="278" />
+                 Width="316" Background="#FF1D2032" BorderBrush="White" Foreground="White" FontFamily="Courier New" FontSize="18" />
         <StackPanel HorizontalAlignment="Left"
-                    Height="111"
-                    Margin="362,116,0,0"
+                    Height="48"
+                    Margin="10,185,0,0"
                     VerticalAlignment="Top"
-                    Width="182">
+                    Width="316">
             <RadioButton Content="Сумма элементов"
                          Height="15"
-                         Width="161"
+                         Width="269"
                          HorizontalAlignment="Left"
-                         Checked="RadioButtonSum_Checked"/>
+                         Checked="RadioButtonSum_Checked" FontFamily="Courier New" FontSize="18" Foreground="#FFFFFEFE"/>
             <RadioButton Content="Количество значений > T"
                          Height="15"
-                         Width="170"
+                         Width="268"
                          HorizontalAlignment="Left"
-                         Checked="RadioButtonCount_Checked"/>
+                         Checked="RadioButtonCount_Checked" FontFamily="Courier New" FontSize="18" Foreground="#FFFFFEFE"/>
             <RadioButton Content="Максимальное значение"
                          Height="15"
-                         Width="168"
+                         Width="266"
                          HorizontalAlignment="Left"
-                         Checked="RadioButtonMax_Checked"/>
+                         Checked="RadioButtonMax_Checked" FontFamily="Courier New" FontSize="18" Foreground="#FFFFFEFE"/>
             <StackPanel x:Name="StackPanelTInfo" Visibility="Hidden">
-            <Label Content="Значение T:"
+                <Label Content="Значение T:"
                    Height="25"
                    Width="182" />
-            <TextBox x:Name = "TextBoxT" 
+                <TextBox x:Name = "TextBoxT" 
                      Height="21"
                      TextWrapping="Wrap"
                      Text=""
