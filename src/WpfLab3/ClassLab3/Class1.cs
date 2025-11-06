@@ -14,6 +14,9 @@ namespace ClassLab3
             None
         }
 
+        /// <summary>
+        /// Структура цикла расчёта, содержит в себе все данные, используемые в цикле рассчёта
+        /// </summary>
         public struct Cycle
         {
             public bool post;
@@ -24,6 +27,14 @@ namespace ClassLab3
             public int T;
         }
 
+
+        /// <summary>
+        /// Метод для инициализации цикла расчёта
+        /// </summary>
+        /// <param name="arr">Массив целых чисел</param>
+        /// <param name="checkedTask">Выбранный тип</param>
+        /// <param name="actualT">Текущее значение T</param>
+        /// <returns>Структура cycle</returns>
         public static Cycle InitializeCycle(int[] arr, TaskType checkedTask, int actualT)
         {
             Cycle cycle = new Cycle();
@@ -192,6 +203,14 @@ namespace ClassLab3
 
             return (invariantText, invariantFormula);
         }
+
+        /// <summary>
+        /// Метод для вычисления варианта-функции t
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <returns></returns>
+        public static int VariantFunctionT(int i, int j) => j - i;
 
     }
 }
