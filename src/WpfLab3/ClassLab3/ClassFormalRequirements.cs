@@ -97,7 +97,7 @@ namespace ClassLab3
         /// <param name="i">Итератор</param>
         /// <param name="j">Длинна массива</param>
         /// <returns>Значение t функции в текстовом формате</returns>
-        private static string? TCalculation(TaskType taskType, int i, int j) => taskType == TaskType.Count? $"{VariantFunctionT(i, j)}" : null;
+        private static string TCalculation(TaskType taskType, int i, int j) => taskType == TaskType.Count? $"{VariantFunctionT(i, j)}" : null;
 
         /// <summary>
         /// Метод для вывода всех формальных требований
@@ -106,7 +106,7 @@ namespace ClassLab3
         /// <param name="i"></param>
         /// <param name="j"></param>
         /// <returns></returns>
-        public static string?[] ShowAllFormalRequirements(TaskType taskType, int i, int j)
+        public static string[] ShowAllFormalRequirements(TaskType taskType, int i, int j)
         {
             string pre = PreCalculation(taskType);
             string inv = InvCalculation(taskType);
