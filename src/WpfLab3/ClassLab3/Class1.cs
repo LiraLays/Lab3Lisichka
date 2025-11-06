@@ -16,6 +16,7 @@ namespace ClassLab3
 
         public struct Cycle
         {
+            public bool post;
             public int i;
             public int res;
             public int[] array;
@@ -26,6 +27,7 @@ namespace ClassLab3
         public static Cycle InitializeCycle(int[] arr, TaskType checkedTask, int actualT)
         {
             Cycle cycle = new Cycle();
+            cycle.post = true;
             cycle.i = 0;
             cycle.array = arr;
             cycle.taskType = checkedTask;
@@ -150,14 +152,14 @@ namespace ClassLab3
         /// <returns>Возвращает значение итератора, максимальное значение, результат на данном шаге
         ///          В случае если цикл закончился возвращает все значения null
         /// </returns>
-        public static (int?, int?, int?) MakeStep(int i, int res, int[] array, TaskType taskType, int T = 0)
+        public static (int?, int?, int?, bool) MakeStep(bool post, int i, int res, int[] array, TaskType taskType, int T = 0)
         {
             int j = array.Length;
-            (bool result, int resInt) = TryMakeStep(i, j, res, array, taskType, T);
+            (bool result, int resInt, bool postRes) = TryMakeStep(post, i, j, res, array, taskType, T);
             if (result)
-                return (i, j, resInt);
+                return (i, j, resInt, postRes);
             else
-                return (null, null, null);
+                return (null, null, null, postRes);
         }
     
         /// <summary>
@@ -170,9 +172,9 @@ namespace ClassLab3
         /// <param name="taskType">Тип операции</param>
         /// <param name="T">Значение для сравнения</param>
         /// <returns>true - если изменение прошло успешно, false - в случае окончания цикла</returns>
-        public static (bool, int) TryMakeStep(int i, int j, int res, int[] array, TaskType taskType, int T)
+        public static (bool, int, bool) TryMakeStep(bool post, int i, int j, int res, int[] array, TaskType taskType, int T)
         {
-            if (i >= j) return (false, res);
+            if (i >= j) return (false, res, true);
             else
             {
                 switch (taskType)
@@ -187,7 +189,7 @@ namespace ClassLab3
                         res = ChangeMax(res, i, array);
                         break;
                 }
-                return (true, res);
+                return (true, res, false);
             }
         }
 

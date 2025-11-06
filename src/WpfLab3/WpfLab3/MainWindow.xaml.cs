@@ -67,10 +67,13 @@ namespace WpfLab3
                 ActualCycle = Class1.InitializeCycle(actualArray, checkedTaskType, actualT);
                 CycleStarted = true;
             }
-            int? i, j, res;
-            (i, j, res) = Class1.MakeStep(ActualCycle.i, ActualCycle.res, ActualCycle.array ,ActualCycle.taskType, ActualCycle.T);
+            int? i, j, res; bool post;
+            (i, j, res, post) = Class1.MakeStep(ActualCycle.post, ActualCycle.i, ActualCycle.res, ActualCycle.array ,ActualCycle.taskType, ActualCycle.T);
             if (i == null && j == null && res == null)
             {
+                TextBoxArrayChanges.Text = $"Цикл закончен!\n" +
+                    $"Значение POST: {post}\n" +
+                    $"Значение res: {ActualCycle.res}";
                 MessageBox.Show($"Цикл закончен! \n Значение res: {ActualCycle.res}");
                 return;
             }
@@ -80,6 +83,7 @@ namespace WpfLab3
                 ActualCycle.res = (int)res;
                 TextBoxArrayChanges.Text = $"Изменяемая ячейка: {ActualCycle.array[(int) i]}\n" +
                     $"Индекс j: {j}\n" +
+                    $"Значение POST: {post}\n" +
                     $"Значение res: {ActualCycle.res}";
             }
         }
