@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using ClassLab3;
+using Microsoft.VisualBasic;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,7 +10,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ClassLab3;
 
 namespace WpfLab3
 {
@@ -17,22 +18,21 @@ namespace WpfLab3
     /// </summary>
     public partial class MainWindow : Window
     {
+        public SolidColorBrush RED = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFA33D3D"));
+        public SolidColorBrush GREEN = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF3DA354"));
+
         public int arraySize;
         public int[] actualArray;
         public Class1.TaskType checkedTaskType = Class1.TaskType.None;
         public Class1.Cycle ActualCycle;
         public int actualT;
         public bool CycleStarted = false;
+       
 
         public MainWindow()
         {
             InitializeComponent();
             SliderSizeArray.ValueChanged += SliderSizeArray_Changed;
-        }
-
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
 
         private void ButtonGenerateArray_Click(object sender, RoutedEventArgs e)
@@ -47,18 +47,36 @@ namespace WpfLab3
             arraySize = (int) SliderSizeArray.Value;
         }
 
-        private void ParseArrayAndT()
+        private bool ParseArrayAndT()
         {
-            actualArray = TextBoxArrayElems.Text.Trim().Split(", ").Select(x => int.Parse(x)).ToArray();
-            actualT = checkedTaskType == Class1.TaskType.Count ? int.Parse(TextBoxT.Text.Trim()) : 0; // Добавить провеки
+            if (TextBoxT.Text == string.Empty)
+            {
+                MessageBox.Show("Для начала работы введите значение в поле T");
+                return false;
+            }
+            try
+            {
+                actualArray = TextBoxArrayElems.Text.Trim().Split(", ").Select(x => int.Parse(x)).ToArray();
+                actualT = checkedTaskType == Class1.TaskType.Count ? int.Parse(TextBoxT.Text.Trim()) : 0; // Добавить провеки
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
             //MessageBox.Show($"{actualT} > {actualArray[0]} = {actualT > actualArray[0]}");
+
         }
 
         private void ButtonMakeStep_Click(object sender, RoutedEventArgs e)
         {
+            
             if (!CycleStarted)
             {
-                ParseArrayAndT();
+                if (!ParseArrayAndT()) return;
+                ShowWp();
+                ProgressBar.Maximum = actualArray.Length;
+                ProgressBar.Value = actualArray.Length;
                 if (checkedTaskType == Class1.TaskType.None)
                 {
                     MessageBox.Show("Выберите тип операции с помощью RadioButton");
@@ -66,15 +84,21 @@ namespace WpfLab3
                 }
                 ActualCycle = Class1.InitializeCycle(actualArray, checkedTaskType, actualT);
                 CycleStarted = true;
+                string InvariantText, InvariantFormula;
+                (InvariantText, InvariantFormula) = Class1.InvariantType(ActualCycle.taskType, ActualCycle.array, ActualCycle.T);
+                InvariantTextBox.Text = $"{InvariantText}\n" +
+                    $"{InvariantFormula}";
             }
             int? i, j, res; bool post;
             (i, j, res, post) = Class1.MakeStep(ActualCycle.post, ActualCycle.i, ActualCycle.res, ActualCycle.array ,ActualCycle.taskType, ActualCycle.T);
             if (i == null && j == null && res == null)
             {
+                LoopIndicator.Fill = post ? GREEN : RED;
                 TextBoxArrayChanges.Text = $"Цикл закончен!\n" +
                     $"Значение POST: {post}\n" +
                     $"Значение res: {ActualCycle.res}";
                 MessageBox.Show($"Цикл закончен! \n Значение res: {ActualCycle.res}");
+                CycleStarted = false;
                 return;
             }
             else
@@ -85,6 +109,9 @@ namespace WpfLab3
                     $"Индекс j: {j}\n" +
                     $"Значение POST: {post}\n" +
                     $"Значение res: {ActualCycle.res}";
+                LoopIndicator.Fill = post ? GREEN : RED;
+                InvariantIndicator.Fill = GREEN;
+                ProgressBar.Value = Class1.VariantFunctionT(ActualCycle.i, ActualCycle.array.Length);
             }
         }
 
@@ -96,30 +123,60 @@ namespace WpfLab3
         private void RadioButtonSum_Checked(object sender, RoutedEventArgs e)
         {
             ChangeStackPanelVisibilty(false);
-            textBox.Visibility = Visibility.Hidden;
+            TextBoxT.Visibility = Visibility.Hidden;
             checkedTaskType = Class1.TaskType.Sum;
         }
         private void RadioButtonMax_Checked(object sender, RoutedEventArgs e)
         {
             ChangeStackPanelVisibilty(false);
-            textBox.Visibility = Visibility.Hidden;
+            TextBoxT.Visibility = Visibility.Hidden;
             checkedTaskType = Class1.TaskType.Max;
         }
         private void RadioButtonCount_Checked(object sender, RoutedEventArgs e)
         {
             ChangeStackPanelVisibilty(true);
-            textBox.Visibility = Visibility.Visible;
+            TextBoxT.Text = "";
+            TextBoxT.Visibility = Visibility.Visible;
             checkedTaskType = Class1.TaskType.Count;
+        }
+
+        private void ShowWp()
+        {
+            FormulaTextBox.Text = ClassFormalRequirements.ShowWpFormula();
         }
 
         private void ButtonStart_Click(object sender, RoutedEventArgs e)
         {
-            ParseArrayAndT();
+            if (!ParseArrayAndT()) return;
+            ShowWp();
+            ProgressBar.Maximum = actualArray.Length;
+            ProgressBar.Value = actualArray.Length;
+            string InvariantText, InvariantFormula;
+            (InvariantText, InvariantFormula) = Class1.InvariantType(checkedTaskType, actualArray, actualT);
+            InvariantTextBox.Text = $"{InvariantText}\n" +
+                    $"{InvariantFormula}";
             (bool post, int res) = Class1.MakeOperation(actualArray, checkedTaskType, actualT);
             TextBoxArrayChanges.Text = $"Значение POST: {post}\n" +
                 $"Значение res: {res}";
+            LoopIndicator.Fill = post ? GREEN : RED;
+            InvariantIndicator.Fill = GREEN;
+            ProgressBar.Value = 0;
+            CycleStarted = false;
         }
 
-
+        private void ButtonShowFormal_Click(object sender, RoutedEventArgs e)
+        {
+            if (!CycleStarted)
+            {
+                MessageBox.Show("Для отображения формальных требований начните цикл вычисления по шагам");
+                return;
+            }
+            else
+            {
+                int actualSize = ActualCycle.array.Length;
+                string[] strings = ClassFormalRequirements.ShowAllFormalRequirements(ActualCycle.taskType, ActualCycle.i, actualSize);
+                MessageBox.Show(String.Join("\n", strings));
+            }
+        }
     }
 }

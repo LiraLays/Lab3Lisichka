@@ -112,11 +112,17 @@ namespace ClassLab3
             string inv = InvCalculation(taskType);
             string post = PostCalculation(taskType);
             string T = TCalculation(taskType, i, j);
-            string VC = "1. Pre => Inv" +
-                "2. (Inv ∧ B) => wp(S, Inv)" +
-                "3. (Inv ∧ !B) => Post" +
+            string VC = "1. Pre => Inv\n" +
+                "2. (Inv ∧ B) => wp(S, Inv)\n" +
+                "3. (Inv ∧ !B) => Post\n" +
                 "4. Inv ∧ B => t>=0 && Inv ∧ B => wp(S, t' < t)";
             return [pre, inv, post, VC, T];
         }
+
+        /// <summary>
+        /// Метод для вывода формулы wp
+        /// </summary>
+        /// <returns>Формулу wp и ее расшифровку</returns>
+        public static string ShowWpFormula() =>  "(Inv ∧ B) => wp(S, Inv)\n" + "Если в начале итерации цикла выполняются и инвариант (Inv), и условие продолжения цикла (B), то после выполнения тела цикла (S) инвариант (Inv) должен сохраняться.";
     }
 }
