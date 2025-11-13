@@ -18,16 +18,15 @@ namespace WpfLab3
     /// </summary>
     public partial class MainWindow : Window
     {
-        public SolidColorBrush RED = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFA33D3D"));
-        public SolidColorBrush GREEN = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF3DA354"));
+        private SolidColorBrush RED = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFA33D3D"));
+        private SolidColorBrush GREEN = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF3DA354"));
 
-        public int arraySize;
-        public int[] actualArray;
-        public Class1.TaskType checkedTaskType = Class1.TaskType.None;
-        public Class1.Cycle ActualCycle;
-        public int actualT;
-        public bool CycleStarted = false;
-       
+        private int arraySize;
+        private int[] actualArray;
+        private Class1.TaskType checkedTaskType = Class1.TaskType.None;
+        private Class1.Cycle ActualCycle;
+        private int actualT;
+        private bool CycleStarted = false;
 
         public MainWindow()
         {
@@ -49,7 +48,7 @@ namespace WpfLab3
 
         private bool ParseArrayAndT()
         {
-            if (TextBoxT.Text == string.Empty)
+            if (TextBoxT.Text == string.Empty && checkedTaskType == Class1.TaskType.Count)
             {
                 MessageBox.Show("Для начала работы введите значение в поле T");
                 return false;
@@ -64,8 +63,6 @@ namespace WpfLab3
                 return false;
             }
             return true;
-            //MessageBox.Show($"{actualT} > {actualArray[0]} = {actualT > actualArray[0]}");
-
         }
 
         private void ButtonMakeStep_Click(object sender, RoutedEventArgs e)
@@ -99,12 +96,11 @@ namespace WpfLab3
                     $"Значение res: {ActualCycle.res}";
                 MessageBox.Show($"Цикл закончен! \n Значение res: {ActualCycle.res}");
                 CycleStarted = false;
-                return;
             }
             else
             {
                 ActualCycle.i++;
-                ActualCycle.res = (int)res;
+                ActualCycle.res = (int) res;
                 TextBoxArrayChanges.Text = $"Изменяемая ячейка: {ActualCycle.array[(int) i]}\n" +
                     $"Индекс j: {j}\n" +
                     $"Значение POST: {post}\n" +
@@ -177,6 +173,13 @@ namespace WpfLab3
                 string[] strings = ClassFormalRequirements.ShowAllFormalRequirements(ActualCycle.taskType, ActualCycle.i, actualSize);
                 MessageBox.Show(String.Join("\n", strings));
             }
+        }
+
+        private void ButtonReference_Click(object sender, RoutedEventArgs e)
+        {
+            var helpWindow = new HelpWindow();
+            helpWindow.Owner = this;
+            helpWindow.ShowDialog();
         }
     }
 }
